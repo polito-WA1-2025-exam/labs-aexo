@@ -1,0 +1,44 @@
+-- Enable foreign keys
+PRAGMA foreign_keys = ON;
+
+-- Populate the Meme table with 5 records
+INSERT INTO Meme (imageUrl) VALUES ('http://example.com/meme1.jpg');
+INSERT INTO Meme (imageUrl) VALUES ('http://example.com/meme2.jpg');
+INSERT INTO Meme (imageUrl) VALUES ('http://example.com/meme3.jpg');
+INSERT INTO Meme (imageUrl) VALUES ('http://example.com/meme4.jpg');
+INSERT INTO Meme (imageUrl) VALUES ('http://example.com/meme5.jpg');
+
+-- Populate the Caption table with 5 records
+INSERT INTO Caption (text) VALUES ('When you realize it''s Monday again.');
+INSERT INTO Caption (text) VALUES ('That moment when nothing goes right.');
+INSERT INTO Caption (text) VALUES ('Not sure if I should laugh or cry.');
+INSERT INTO Caption (text) VALUES ('I should not have done that...');
+INSERT INTO Caption (text) VALUES ('This is fine.');
+
+-- Populate the MemeCaption table linking memes and captions with points
+INSERT INTO MemeCaption (meme_id, caption_id, points) VALUES (1, 1, 10);
+INSERT INTO MemeCaption (meme_id, caption_id, points) VALUES (2, 2, 20);
+INSERT INTO MemeCaption (meme_id, caption_id, points) VALUES (3, 3, 30);
+INSERT INTO MemeCaption (meme_id, caption_id, points) VALUES (4, 4, 40);
+INSERT INTO MemeCaption (meme_id, caption_id, points) VALUES (5, 5, 50);
+
+-- Populate the Player table with 5 records
+INSERT INTO Player (username, password) VALUES ('alice', 'password1');
+INSERT INTO Player (username, password) VALUES ('bob', 'password2');
+INSERT INTO Player (username, password) VALUES ('charlie', 'password3');
+INSERT INTO Player (username, password) VALUES ('dave', 'password4');
+INSERT INTO Player (username, password) VALUES ('eve', 'password5');
+
+-- Populate the Game table with 5 records (each linked to a player)
+INSERT INTO Game (player_username, totalScore) VALUES ('alice', 100);
+INSERT INTO Game (player_username, totalScore) VALUES ('bob', 200);
+INSERT INTO Game (player_username, totalScore) VALUES ('charlie', 300);
+INSERT INTO Game (player_username, totalScore) VALUES ('dave', 400);
+INSERT INTO Game (player_username, totalScore) VALUES ('eve', 500);
+
+-- Populate the Round table with 5 records (each round is linked to a game, a meme, and a selected caption)
+INSERT INTO Round (game_id, meme_id, selected_caption_id, score) VALUES (1, 1, 1, 10);
+INSERT INTO Round (game_id, meme_id, selected_caption_id, score) VALUES (2, 2, 2, 20);
+INSERT INTO Round (game_id, meme_id, selected_caption_id, score) VALUES (3, 3, 3, 30);
+INSERT INTO Round (game_id, meme_id, selected_caption_id, score) VALUES (4, 4, 4, 40);
+INSERT INTO Round (game_id, meme_id, selected_caption_id, score) VALUES (5, 5, 5, 50);

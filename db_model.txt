@@ -1,18 +1,22 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE Meme (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     imageUrl VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Caption (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     text TEXT NOT NULL
 );
 
 CREATE TABLE MemeCaption (
-    meme_id INT REFERENCES Meme(id) ON DELETE CASCADE,
-    caption_id INT REFERENCES Caption(id) ON DELETE CASCADE,
+    meme_id INT,
+    caption_id INT,
     points INT NOT NULL,
-    PRIMARY KEY (meme_id, caption_id)
+    PRIMARY KEY (meme_id, caption_id),
+    FOREIGN KEY (meme_id) REFERENCES Meme(id) ON DELETE CASCADE,
+    FOREIGN KEY (caption_id) REFERENCES Caption(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Player (
@@ -21,15 +25,19 @@ CREATE TABLE Player (
 );
 
 CREATE TABLE Game (
-    id SERIAL PRIMARY KEY,
-    player_username VARCHAR(50) REFERENCES Player(username) ON DELETE CASCADE,
-    totalScore INT DEFAULT 0
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_username VARCHAR(50),
+    totalScore INT DEFAULT 0,
+    FOREIGN KEY (player_username) REFERENCES Player(username) ON DELETE CASCADE
 );
 
 CREATE TABLE Round (
-    id SERIAL PRIMARY KEY,
-    game_id INT REFERENCES Game(id) ON DELETE CASCADE,
-    meme_id INT REFERENCES Meme(id) ON DELETE CASCADE,
-    selected_caption_id INT REFERENCES Caption(id) ON DELETE CASCADE,
-    score INT NOT NULL
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    game_id INT,
+    meme_id INT,
+    selected_caption_id INT,
+    score INT NOT NULL,
+    FOREIGN KEY (game_id) REFERENCES Game(id) ON DELETE CASCADE,
+    FOREIGN KEY (meme_id) REFERENCES Meme(id) ON DELETE CASCADE,
+    FOREIGN KEY (selected_caption_id) REFERENCES Caption(id) ON DELETE CASCADE
 );
