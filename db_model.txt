@@ -1,0 +1,35 @@
+CREATE TABLE Meme (
+    id SERIAL PRIMARY KEY,
+    imageUrl VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Caption (
+    id SERIAL PRIMARY KEY,
+    text TEXT NOT NULL
+);
+
+CREATE TABLE MemeCaption (
+    meme_id INT REFERENCES Meme(id) ON DELETE CASCADE,
+    caption_id INT REFERENCES Caption(id) ON DELETE CASCADE,
+    points INT NOT NULL,
+    PRIMARY KEY (meme_id, caption_id)
+);
+
+CREATE TABLE Player (
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Game (
+    id SERIAL PRIMARY KEY,
+    player_username VARCHAR(50) REFERENCES Player(username) ON DELETE CASCADE,
+    totalScore INT DEFAULT 0
+);
+
+CREATE TABLE Round (
+    id SERIAL PRIMARY KEY,
+    game_id INT REFERENCES Game(id) ON DELETE CASCADE,
+    meme_id INT REFERENCES Meme(id) ON DELETE CASCADE,
+    selected_caption_id INT REFERENCES Caption(id) ON DELETE CASCADE,
+    score INT NOT NULL
+);
