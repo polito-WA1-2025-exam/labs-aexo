@@ -1,2 +1,55 @@
-# IGNORE HTTP FILES
+### HTTP Files ###
 *.http
+
+### Node.js ###
+node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+
+### Logs ###
+logs/
+*.log
+*.log.*
+
+### Database Files ###
+*.sqlite
+*.sqlite3
+*.db
+
+### Backup and Cache ###
+*.bak
+*.tmp
+*.swp
+
+### VSCode & IDE ###
+.vscode/
+.idea/
+*.iml
+
+### OS-generated files ###
+.DS_Store
+Thumbs.db
+
+### Docker ###
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+### Build files ###
+dist/
+out/
+coverage/
+.nyc_output/
+
+### Misc ###
+*.pid
+*.seed
+*.pid.lock
