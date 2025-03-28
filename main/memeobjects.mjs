@@ -1,109 +1,63 @@
-// Meme object constructor
-class Meme {
-    constructor(id, imageUrl) {
-        this.id = id;
-        this.imageUrl = imageUrl;
-        this.captions = []; // Stores associated captions
+import sqlite3 from "sqlite3";
+
+// TODO: change the path to the database file
+const db = new sqlite3.Database("./temp.db", (err) => {
+  if (err) {
+    console.error("Error opening database:", err.message);
+  } else {
+    console.log("Connected to the SQLite database.");
+  }
+});
+
+/**
+ * Retrieve all rows from a specified table.
+ * @param {string} tableName - The name of the table.
+ * @returns {Promise<Array<Object>>} Promise resolving to an array of objects.
+ */
+const getAllItems = (tableName) => {
+  return new Promise((resolve, reject) => {
+    db.all(`SELECT * FROM ${tableName}`, [], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
+};
+
+/**
+ * Retrieve rows from a table that meet a specific condition.
+ * @param {number} idThreshold - The id value to compare against.
+ * @returns {Promise<Array<Object>>} Promise resolving to an array of objects.
+ */
+const getMemesByCondition = (idThreshold) => {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM Meme WHERE id > ?", [idThreshold], (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
+};
+
+// Testing the functions:
+getAllItems("Meme")
+  .then((memes) => console.log("All Memes:", memes))
+  .catch((err) => console.error("Error retrieving all memes:", err));
+
+// Uncomment to test:
+getMemesByCondition(1)
+  .then((memes) => console.log("Memes with id > 1:", memes))
+  .catch((err) => console.error("Error retrieving memes by condition:", err));
+
+// Optionally, close the database connection when done
+setTimeout(() => {
+  db.close((err) => {
+    if (err) {
+      console.error("Error closing database:", err.message);
+    } else {
+      console.log("Database connection closed.");
     }
-
-
-    // if caption is right we have caption + point.
-    //  if caption is  wrongwe have caption + 0 points.
-    addCaption(caption, points) {
-        this.captions.push({ caption, points });
-    }
-}
-
-// Caption object constructor
-// if at some point, we want to know for each caption, which meme it belongs to, we can add a memeId array property to the Caption class.
-class Caption {
-    constructor(id, text) {
-        this.id = id;
-        this.text = text;
-    }
-}
-
-// Player object constructor
-class Player {
-    constructor(username) {
-        this.username = username;
-        this.games = []; // Stores past games
-    }
-
-    addGame(game) {
-        this.games.push(game);
-    }
-}
-
-// Game object constructor
-class Game {
-    constructor(player) {
-        this.player = player;
-        this.rounds = [];
-        this.totalScore = 0;
-    }
-
-    addRound(round) {
-        this.rounds.push(round);
-        this.totalScore += round.score;
-    }
-}
-
-// Round object constructor
-class Round {
-    constructor(meme, selectedCaption) {
-        this.meme = meme;
-        this.selectedCaption = selectedCaption;
-        this.score = this.calculateScore();
-    }
-
-    calculateScore() {
-        const matchingCaption = this.meme.captions.find(c => c.caption === this.selectedCaption);
-        return matchingCaption ? matchingCaption.points : 0;
-    }
-}
-
-// MemeCollection to manage memes
-class MemeCollection {
-    constructor() {
-        this.memes = [];
-    }
-
-    addMeme(meme) {
-        this.memes.push(meme);
-    }
-
-    getRandomMeme() {
-        return this.memes[Math.floor(Math.random() * this.memes.length)];
-    }
-}
-
-// Example: Populating with memes and captions
-const memeCollection = new MemeCollection();
-
-const meme1 = new Meme(1, "meme1.jpg");
-meme1.addCaption("This is hilarious!", 1);
-meme1.addCaption("Too funny!", 2);
-meme1.addCaption("LOL!", 3);
-
-const meme2 = new Meme(2, "meme2.jpg");
-meme2.addCaption("I relate to this.", 1);
-meme2.addCaption("So true!", 2);
-meme2.addCaption("This is me.", 3);
-
-memeCollection.addMeme(meme1);
-memeCollection.addMeme(meme2);
-
-// Example game flow
-const player = new Player("JohnDoe");
-const game = new Game(player);
-
-for (let i = 0; i < 3; i++) {
-    const meme = memeCollection.getRandomMeme();
-    const randomCaption = meme.captions[Math.floor(Math.random() * meme.captions.length)].caption;
-    const round = new Round(meme, randomCaption);
-    game.addRound(round);
-}
-
-player.addGame(game);
-console.log(player);
+  });
+}, 3000);
