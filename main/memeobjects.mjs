@@ -2,7 +2,7 @@
 import sqlite3 from 'sqlite3';
 
 // Open a connection to your SQLite database file
-const db = new sqlite3.Database('./DB_memeGame.db', (err) => {
+const db = new sqlite3.Database('../DB_memeGame.db', (err) => {
   if (err) {
     console.error("Error opening database:", err.message);
   } else {
@@ -159,4 +159,14 @@ async function testDatabaseOperations() {
 }
 
 // Run the test
-testDatabaseOperations();
+// testDatabaseOperations();
+// comment out the test function call to avoid running it every time
+
+
+export {
+  getAllItems,
+  getMemesByCondition,
+  storeNewMeme,
+  updateMemeImageUrl,
+  deleteMemeById  // <-- Ensure this is exported!
+};
