@@ -1,0 +1,59 @@
+-- 1. Users
+CREATE TABLE User (
+    user_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    username     TEXT    NOT NULL UNIQUE,
+    password_hash TEXT   NOT NULL,
+    email        TEXT    NOT NULL UNIQUE,
+    created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Memes
+CREATE TABLE Meme (
+    meme_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+    image_url  TEXT    NOT NULL,
+    title      TEXT
+);
+
+-- 3. Captions
+CREATE TABLE Caption (
+    caption_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    text       TEXT    NOT NULL UNIQUE
+);
+
+-- 4. Association: which captions are “right” for which memes, and their point‐values
+CREATE TABLE MemeCaption (
+    meme_id     INTEGER NOT NULL,
+    caption_id  INTEGER NOT NULL,
+    points      INTEGER NOT NULL CHECK(points IN (1,2,3)),
+    PRIMARY KEY (meme_id, caption_id),
+    FOREIGN KEY (meme_id)    REFERENCES Meme(meme_id)
+      ON DELETE CASCADE,
+    FOREIGN KEY (caption_id) REFERENCES Caption(caption_id)
+      ON DELETE CASCADE
+);
+
+-- 5. Games
+CREATE TABLE Game (
+    game_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id      INTEGER,        -- NULL = anonymous
+    start_time   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    end_time     DATETIME,
+    total_score  INTEGER,
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+      ON DELETE SET NULL
+);
+
+-- 6. Rounds (one row per meme‐guess within a game)
+CREATE TABLE Round (
+    round_id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    game_id              INTEGER NOT NULL,
+    round_number         INTEGER NOT NULL,
+    meme_id              INTEGER NOT NULL,
+    selected_caption_id  INTEGER NOT NULL,
+    points_awarded       INTEGER NOT NULL,
+    FOREIGN KEY (game_id)             REFERENCES Game(game_id)
+      ON DELETE CASCADE,
+    FOREIGN KEY (meme_id)             REFERENCES Meme(meme_id),
+    FOREIGN KEY (selected_caption_id) REFERENCES Caption(caption_id),
+    UNIQUE (game_id, round_number)    -- enforce exactly one entry per round‐number
+);

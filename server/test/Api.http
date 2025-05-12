@@ -1,0 +1,96 @@
+### Register new user
+
+POST http://localhost:3001/api/register
+Content-Type: application/json
+
+{
+"email": "test2@example.com",
+"password": "Password123!",
+"username": "testuser2"
+}
+
+### Login user
+
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+"username": "testuser",
+"password": "Password123!"
+}
+
+### Get current session
+
+GET http://localhost:3001/api/sessions/current
+
+### Logout user
+
+DELETE http://localhost:3001/api/logout
+
+### Health check
+
+GET http://localhost:3001/api/health
+
+### Fetch random meme (no excludes)
+
+GET http://localhost:3001/api/memes/random
+
+### Fetch random meme (exclude IDs 1,2)
+
+GET http://localhost:3001/api/memes/random?exclude=1,2
+
+### Get correct captions for meme 2
+
+GET http://localhost:3001/api/memes/2/captions
+
+### Get distractor captions for meme 2 (limit 4)
+
+GET http://localhost:3001/api/memes/2/distractors?limit=4
+
+### Create a new game (anonymous)
+
+POST http://localhost:3001/api/games
+Content-Type: application/json
+
+{
+"userId": null
+}
+
+### Create a new game (logged-in user ID 1)
+
+POST http://localhost:3001/api/games
+Content-Type: application/json
+
+{
+"userId": 1
+}
+
+### Get finished games for user 1
+
+GET http://localhost:3001/api/users/1/games
+
+### Submit round 2 for game 2 (anonymous)
+
+POST http://localhost:3001/api/games/3/rounds
+Content-Type: application/json
+
+{
+"roundNumber": 3,
+"memeId": 6,
+"selectedCaptionId": 2
+}
+
+### Get all rounds for game 2
+
+GET http://localhost:3001/api/games/2/rounds
+
+### Associate caption 5 to meme 1 with 2 points (logged-in)
+
+POST http://localhost:3001/api/meme-captions
+Content-Type: application/json
+
+{
+"memeId": 1,
+"captionId": 10,
+"points": 3
+}
