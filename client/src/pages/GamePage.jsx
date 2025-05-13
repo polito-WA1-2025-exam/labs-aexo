@@ -107,6 +107,33 @@ export default function GamePage({ user }) {
     }
   };
 
+  const handleRestart = async () => {
+    setEnded(false);
+    setSummary(null);
+    setScore(0);
+    setRoundNumber(1);
+    setMeme(null);
+    setOptions([]);
+    setLoading(true);
+    setError(null);
+    started.current = false; // allow the effect to run again
+  
+    // Start a new game
+    try {
+      let game_id;
+      if (user) {
+        const result = await API.startGame(user.id);
+        game_id = result.game_id;
+      } else {
+        const result = await API.startGame();
+        game_id = result.game_id;
+      }
+      setGameId(game_id);
+    } catch (err) {
+      setError(err.error || 'Failed to start game');
+    }
+  };
+
   // 4) Render states
   if (error) return (
     <div className="container mt-5">
@@ -119,7 +146,12 @@ export default function GamePage({ user }) {
   );
 
   if (ended) return (
-    <SummaryView summary={summary} totalScore={score} />
+    <div>
+      <SummaryView summary={summary} totalScore={score} />
+      <div className="text-center mt-3">
+        <button className="btn btn-primary" onClick={handleRestart}>Restart the game</button>
+      </div>
+    </div>
   );
 
   return (
