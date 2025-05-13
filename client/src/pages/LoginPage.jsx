@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../API';
 
-export default function LoginPage() {
+export default function LoginPage({ setUser }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -14,7 +14,10 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      await API.logIn({ username, password });
+
+      const loggedInUser = await API.logIn({ username, password });
+
+      setUser(loggedInUser);
       // On successful login, go to /game
       navigate('/game');
     } catch (err) {

@@ -41,7 +41,7 @@ GET http://localhost:3001/api/memes/random?exclude=1,2
 
 ### Get correct captions for meme 2
 
-GET http://localhost:3001/api/memes/2/captions
+GET http://localhost:3001/api/memes/9/captions
 
 ### Get distractor captions for meme 2 (limit 4)
 
