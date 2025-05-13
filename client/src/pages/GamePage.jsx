@@ -8,7 +8,7 @@ import SummaryView from './components/SummaryView';
 
 export default function GamePage({ user }) {
   const [gameId, setGameId]           = useState(null);
-  const [roundNumber, setRoundNumber] = useState(1);
+  const [roundNumber, setRoundNumber] = useState(0);
   const [meme, setMeme]               = useState(null);
   const [options, setOptions]         = useState([]);
   const [score, setScore]             = useState(0);
@@ -16,6 +16,7 @@ export default function GamePage({ user }) {
   const [summary, setSummary]         = useState(null);
   const [loading, setLoading]         = useState(true);
   const [error, setError]             = useState(null);
+  const [usedMemes, setUsedMemes]     = useState([]);
   const started = useRef(false);
 
 
@@ -37,6 +38,7 @@ export default function GamePage({ user }) {
           game_id = result.game_id;
         }
         setGameId(game_id);
+        setRoundNumber(1);
       } catch (err) {
         setError(err.error || 'Failed to start game');
       }
@@ -52,9 +54,8 @@ export default function GamePage({ user }) {
     (async () => {
       try {
         // exclude memes already shown
-        const used = summary ? summary.map(r => r.meme_id) : [];
-        console.log("used", used);
-        const m = await API.fetchRandomMeme(used);
+        console.log("usedMemes", usedMemes);
+        const m = await API.fetchRandomMeme(usedMemes);
         console.log("random meme", m);
 
         const correct    = await API.fetchCorrectCaptions(m.meme_id);
@@ -77,7 +78,7 @@ export default function GamePage({ user }) {
         setLoading(false);
       }
     })();
-  }, [gameId, roundNumber]);
+  }, [roundNumber]);
 
   // 3) Handle user picking a caption
   const handlePick = async (caption) => {
@@ -91,6 +92,7 @@ export default function GamePage({ user }) {
         selectedCaptionId: caption.caption_id
       });
       console.log("result", result);
+      setUsedMemes(usedMemes => [...usedMemes, meme.meme_id]);
 
       if (result.ended) {
         setScore(result.total_score);
@@ -116,6 +118,7 @@ export default function GamePage({ user }) {
     setOptions([]);
     setLoading(true);
     setError(null);
+    setUsedMemes([]);
     started.current = false; // allow the effect to run again
   
     // Start a new game
@@ -124,11 +127,14 @@ export default function GamePage({ user }) {
       if (user) {
         const result = await API.startGame(user.id);
         game_id = result.game_id;
+        console.log("game_id", game_id);
       } else {
         const result = await API.startGame();
         game_id = result.game_id;
+        console.log("game_id", game_id);
       }
       setGameId(game_id);
+      setRoundNumber(1);
     } catch (err) {
       setError(err.error || 'Failed to start game');
     }
