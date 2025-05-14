@@ -20,15 +20,17 @@ CREATE TABLE MemeCaption (
 );
 
 CREATE TABLE Player (
-    username VARCHAR(50) PRIMARY KEY,
-    password VARCHAR(255) NOT NULL
+    user_id INT PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(50) ,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Game (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    player_username VARCHAR(50),
+    player_user_id INT,
     totalScore INT DEFAULT 0,
-    FOREIGN KEY (player_username) REFERENCES Player(username) ON DELETE CASCADE
+    FOREIGN KEY (player_user_id) REFERENCES Player(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Round (
