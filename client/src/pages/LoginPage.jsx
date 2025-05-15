@@ -1,24 +1,21 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import API from '../API';
+import { useAuth } from '../context/AuthContext';
 
-export default function LoginPage({ setUser }) {
+export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-
-      const loggedInUser = await API.logIn({ username, password });
-
-      setUser(loggedInUser);
-      // On successful login, go to /game
+      await login({ username, password });
       navigate('/game');
     } catch (err) {
       // err is the parsed JSON error object from your API

@@ -14,6 +14,7 @@ async function register({ email, password, username }) {
   const data = await res.json();
   return data;
 }
+// be aware that prof used try catch in the video, but i didn't use it because i want to see the error message
 
 async function logIn({ username, password }) {
   const res = await fetch(`${APIURL}/api/sessions`, {
@@ -106,6 +107,7 @@ async function startGame(userId = null) {
   });
   if (!res.ok) {
     const err = await res.json();
+    console.log("we faced an error in startGame");
     throw err;
   }
   const data = await res.json();  // { game_id }

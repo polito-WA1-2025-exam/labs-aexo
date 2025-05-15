@@ -1,12 +1,14 @@
 // src/pages/GamePage.jsx
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import API from '../API';
 import MemeDisplay from './components/MemeDisplay';
 import CaptionOptionList from './components/CaptionOptionList';
 import ScoreBoard from './components/ScoreBoard';
 import SummaryView from './components/SummaryView';
+import { useAuth } from '../context/AuthContext';
 
-export default function GamePage({ user }) {
+export default function GamePage() {
+  const { user } = useAuth();
   const [gameId, setGameId]           = useState(null);
   const [roundNumber, setRoundNumber] = useState(0);
   const [meme, setMeme]               = useState(null);
@@ -17,13 +19,10 @@ export default function GamePage({ user }) {
   const [loading, setLoading]         = useState(true);
   const [error, setError]             = useState(null);
   const [usedMemes, setUsedMemes]     = useState([]);
-  const started = useRef(false);
 
 
   // 1) Start the game on mount
   useEffect(() => {
-    if (started.current) return;  // avoid duplicate runs in Strict Mode
-    started.current = true;
     (async () => {
       try {
         console.log("user", user);
@@ -45,9 +44,23 @@ export default function GamePage({ user }) {
     })();
   }, []);
 
+
+  // (async () => {
+  //   console.log("Hello from inside the IIFE!");
+  // })();
+
+  // this format is equal to the code below
+  // const x = async () => {
+  //   console.log("Hello from inside the IIFE!");
+  // }
+  // x();
+  
+  // this is just a shorthand for the code above
+
+
   // 2) Load each round's data when gameId or roundNumber changes
   useEffect(() => {
-    if (!gameId || ended) return; // if gameID is null or ended is true, return and finish the function so the game doesn't continue
+    if (!gameId || ended || roundNumber === 0) return; // if gameID is null or ended is true, return and finish the function so the game doesn't continue
     setLoading(true); // set loading to true so the user knows the game is loading
     setError(null); // set error to null so the error message is not shown
 
@@ -113,14 +126,13 @@ export default function GamePage({ user }) {
     setEnded(false);
     setSummary(null);
     setScore(0);
-    setRoundNumber(1);
+    setRoundNumber(0);
     setMeme(null);
     setOptions([]);
     setLoading(true);
     setError(null);
     setUsedMemes([]);
-    started.current = false; // allow the effect to run again
-  
+
     // Start a new game
     try {
       let game_id;

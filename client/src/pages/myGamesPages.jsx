@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import API from '../API';
 import Date from 'date.js';
-export default function UserGamesPage({ user }) {
+import { useAuth } from '../context/AuthContext';
+export default function UserGamesPage() {
+  const { user } = useAuth();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

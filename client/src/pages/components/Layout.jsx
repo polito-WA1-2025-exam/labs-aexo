@@ -1,14 +1,13 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-import API from '../../API';
+import { useAuth } from '../../context/AuthContext';
 
-function Layout({ user, setUser }) {
-
+function Layout() {
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await API.logOut();
-    setUser(null);
+    await logout();
     navigate('/login');
   };
   
