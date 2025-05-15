@@ -89,6 +89,11 @@ GET http://localhost:3001/api/games/2/rounds
 POST http://localhost:3001/api/meme-captions
 Content-Type: application/json
 
+### Get all memes (logged-in)
+
+GET http://localhost:3001/api/memes
+
+
 {
 "memeId": 1,
 "captionId": 10,

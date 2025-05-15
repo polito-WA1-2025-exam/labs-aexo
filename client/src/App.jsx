@@ -7,6 +7,8 @@ import './App.css';
 import Layout from './pages/components/Layout';
 import GamePage  from './pages/GamePage';
 import UserGamesPage from './pages/myGamesPages';
+import MemesListPage from './pages/MemesListPage';
+import MemeDetailPage from './pages/MemeDetailPage';
 import { AuthProvider } from './context/AuthContext';
 
 
@@ -22,6 +24,9 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/game"  element={<GamePage />} />
           <Route path="/myGames" element={<UserGamesPage />} />
+          <Route path="/memes" element={<MemesListPage />} />
+          <Route path="/memes/:memeId" element={<MemeDetailPage />} />
+          <Route path="/" element={<Navigate to="/game" />} />
         </Route>
       </Routes>
       </BrowserRouter>

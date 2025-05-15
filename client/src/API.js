@@ -168,6 +168,18 @@ async function addMemeCaption(memeId, captionId, points) {
   return data;
 }
 
+async function getAllMemes() {
+  const res = await fetch(`${APIURL}/api/memes`, {
+    credentials: 'include',
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw err;
+  }
+  const data = await res.json();
+  return data;
+}
+
 export default {
   register,
   logIn,
@@ -181,5 +193,6 @@ export default {
   getUserGames,
   submitRound,
   getGameRounds,
-  addMemeCaption
+  addMemeCaption,
+  getAllMemes
 };

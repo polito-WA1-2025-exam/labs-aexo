@@ -21,6 +21,12 @@ function Layout() {
           <ul className="navbar-nav">
             <li className="nav-item"><Link className="nav-link" to="/game">Play</Link></li>
 
+            {user && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/memes">All Memes</Link>
+              </li>
+            )}
+
             {!user && (
               <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>
             )}

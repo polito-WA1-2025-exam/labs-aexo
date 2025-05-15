@@ -10,7 +10,7 @@ import LocalStrategy from 'passport-local';
 
 // DAOs
 import { getUser, createUser } from './dao/userDao.mjs';
-import { getRandomMeme }        from './dao/memeDao.mjs';
+import { getRandomMeme, getAllMemes }        from './dao/memeDao.mjs';
 import { getCaptionsForMeme,
          getDistractorCaptions } from './dao/captionDao.mjs';
 import { addMemeCaptionAssociation } from './dao/memeCaptionDao.mjs';
@@ -223,6 +223,20 @@ app.post('/api/meme-captions', isLoggedIn, async (req, res) => {
     res.status(400).json({ error: err.toString() });
   }
 });
+
+
+// get all memes
+app.get('/api/memes', isLoggedIn, async (req, res) => {
+  try {
+    const memes = await getAllMemes(); 
+    // [{ meme_id, title, image_url }, …]
+    res.json(memes);
+  } catch (e) {
+    res.status(500).json({ error: e.toString() });
+  }
+});
+
+
 
 // Health-check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));

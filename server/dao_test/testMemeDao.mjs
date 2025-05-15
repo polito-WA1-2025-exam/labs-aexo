@@ -1,4 +1,4 @@
-import { getRandomMeme } from '../dao/memeDao.mjs';
+import { getRandomMeme, getAllMemes } from '../dao/memeDao.mjs';
 
 // Test the getRandomMeme function without excludeIds
 async function testGetRandomMemeNoParams() {
@@ -22,8 +22,22 @@ async function testGetRandomMemeWithParams() {
   }
 }
 
+// Test the getAllMemes function
+async function testGetAllMemes() {
+  try {
+    console.log('Testing getAllMemes...');
+    const memes = await getAllMemes();
+    console.log('All Memes:', memes);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+
+
 // Run the tests
 (async () => {
   await testGetRandomMemeNoParams();
   await testGetRandomMemeWithParams();
+  await testGetAllMemes();
 })();

@@ -18,3 +18,10 @@ export function getRandomMeme(excludeIds = []) {
     });
   });
 }
+
+export function getAllMemes() {
+  const sql = `SELECT meme_id, title, image_url FROM Meme`;
+  return new Promise((resolve, reject) => {
+    db.all(sql, [], (err, rows) => err ? reject(err) : resolve(rows));
+  });
+}
